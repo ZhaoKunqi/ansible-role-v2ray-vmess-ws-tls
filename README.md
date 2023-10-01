@@ -1,2 +1,7 @@
-# ansible-role-v2ray-vmess-ws-tls
-使用Ansible快速架设VMess-WebSocket-TLS协议的V2Ray代理服务器，Ansible playbook that quickly deploy V2Ray proxy server that running VMess-WS-TLS protocol.
+# Ansible-Role-V2Ray-VMess-WebSocket-TLS-Web
+
+本项目是一个Ansible Playbook，这个Playbook可以被用来在服务器上自动化部署V2Ray代理服务器。
+
+本项目中的Playbook会在服务器上安装V2Ray、Nginx和acme.sh以及其依赖关系包，并且部署一个VMess协议，使用WebSocket和TLS的代理服务器，也可以套CDN使用。
+
+## 使用方式

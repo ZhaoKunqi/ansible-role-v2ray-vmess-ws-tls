@@ -1,0 +1,78 @@
+---
+- name: v2fly vmess ws tls deploy
+  become: True
+  hosts: localhost
+  vars_files:
+    - config.yml
+  tasks:
+    - name: download v2ray quick install script
+      get_url:
+        url: https://raw.githubusercontent.com/v2fly/fhs-install-v2ray/master/install-release.sh
+        dest: "{{ lookup('env', 'PWD') }}/install-release.sh"
+
+    - name: run v2ray quick install script
+      shell: "sh {{ lookup('env', 'PWD') }}/install-release.sh"
+
+    - name: stop firewalld service
+      service:
+        name: firewalld
+        state: stopped
+        enabled: False
+        
+    - name: replace selinux enforcing with permissive in /etc/selinux/config
+      ansible.builtin.replace:
+        path: /etc/selinux/config
+        regexp: '^SELINUX=enforcing$'
+        replace: 'SELINUX=permissive'
+
+    - name: setenforce 0
+      shell: setenforce 0
+
+    - name: install nginx
+      yum:
+        name: nginx,socat,curl,wget,tar
+        state: latest
+
+    - name: generate nginx configuration file from template
+      template:
+        src: nginx.conf.j2
+        dest: /etc/nginx/conf.d/{{ custom_domain_name }}.conf
+        mode: '0644'
+
+    - name: generate v2ray configuration file from template
+      template:
+        src: v2ray.conf.json.j2
+        dest: /usr/local/etc/v2ray/config.json
+        mode: '0644'
+
+    - name: download acme.sh script
+      get_url:
+        url: https://get.acme.sh
+        dest: "{{ lookup('env', 'PWD') }}/acme.sh"
+
+    - name: run acme.sh install script
+      shell: "sh {{ lookup('env', 'PWD') }}/acme.sh install --home {{ lookup('env', 'PWD') }}/acme_script --accountemail {{acme_email}}"
+
+    - name: config acme.sh auto upgrade
+      shell: "sh {{ lookup('env', 'PWD') }}/acme_script/acme.sh --upgrade  --auto-upgrade"
+
+    - name: config acme.sh use letsencrypt
+      shell: "sh {{ lookup('env', 'PWD') }}/acme_script/acme.sh --set-default-ca --server letsencrypt"
+    
+    - name: use acme.sh issue for domain
+      shell: "sh {{ lookup('env', 'PWD') }}/acme_script/acme.sh --issue -d {{custom_domain_name}} --keylength ec-256 --pre-hook 'systemctl stop nginx' --standalone --force"
+    
+    - name: install key and fullchain file to destination
+      shell: "sh {{ lookup('env', 'PWD') }}/acme_script/acme.sh --install-cert -d {{custom_domain_name}} --ecc --key-file  /usr/local/etc/v2ray/{{custom_domain_name}}.key --fullchain-file  /usr/local/etc/v2ray/{{custom_domain_name}}.pem --reloadcmd 'systemctl restart nginx' "
+    
+    - name: enable and restart v2ray serivce
+      service:
+        name: v2ray
+        enabled: True
+        state: restarted
+
+    - name: enable and restart nginx serivce
+      service:
+        name: nginx
+        enabled: True
+        state: restarted

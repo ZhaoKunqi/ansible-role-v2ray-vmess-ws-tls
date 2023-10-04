@@ -16,7 +16,7 @@
 
 # 最佳实践
 
-## 安装Ansible)
+## 安装Ansible
 
 RHEL及其下游8版本的系统: `dnf install ansible -y`
 
@@ -24,6 +24,14 @@ RHEL及其下游9版本的系统: `dnf install ansible-core -y`
 
 ## Linode月抛小鸡部署最佳实践
 
-使用便宜Linode月抛小鸡
+买一个Linode的便宜VPS(或者月抛小鸡)
+
+配置要求: 可以选最便宜的配置, 有IPv4就可以
+
+操作系统: CentOS Stream 9(推荐)
+
+
+
+
 
 未完待续 忙完了再写

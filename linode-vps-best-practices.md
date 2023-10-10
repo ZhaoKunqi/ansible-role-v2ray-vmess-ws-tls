@@ -47,6 +47,7 @@ uuid: 'f7fd888b-03ac-43d4-a650-3b2c098da1f3'
 
 保存退出以后，运行Ansible Playbook
 
+
 ```
 ansible-playbook site.yml
 ```

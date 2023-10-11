@@ -14,6 +14,18 @@
 
 * Rocky Linux 8/9
 
+# 更新日志
+
+## 2023年10月11日: 
+
+有一些VPS厂商会默认删除VPS镜像中的防火墙并且设置SELinux为不激活的状态来减少用户可能遇到的麻烦，
+
+在这种被二次定制过的系统中运行时会找不到firewalld服务，也无法改成permissive模式，于是对site.yml进行更新，使其支持在这种环境下部署。
+
+1. 修复了在已经将firewalld.service删除掉的VPS上运行时报错的问题
+ 
+2. 修复了在已经将SELinux设置为disabled模式的VPS上运行时报错的问题
+
 # 最佳实践
 
 [Linode小鸡VPS最佳实践部署教程 linode-vps-best-practices.md](linode-vps-best-practices.md)

@@ -18,6 +18,7 @@
         name: firewalld
         state: stopped
         enabled: False
+      ignore_errors: True
         
     - name: replace selinux enforcing with permissive in /etc/selinux/config
       ansible.builtin.replace:

@@ -41,7 +41,7 @@ acme_email: 'raman@rebecca.net'
 # 自定义Nginx路径，随便写一个即可
 custom_path: 'b5c403e4'
 
-# VMess的UUID(或密码)，可以使用uuidgen命令生成，也可以使用https://www.uuidgenerator.net/生成
+# VMess的UUID(也可以理解为密码)，可以使用uuidgen命令生成，也可以使用https://www.uuidgenerator.net/生成
 uuid: 'f7fd888b-03ac-43d4-a650-3b2c098da1f3'
 ```
 
